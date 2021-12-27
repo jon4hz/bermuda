@@ -8,6 +8,8 @@ import (
 	"github.com/docker/docker/client"
 	"github.com/dustin/go-humanize"
 	"github.com/jon4hz/bermuda/internal/config"
+	"github.com/jon4hz/bermuda/internal/logger"
+	"go.uber.org/zap"
 )
 
 func Run(cfg *config.Config) error {
@@ -15,9 +17,11 @@ func Run(cfg *config.Config) error {
 		return fmt.Errorf("config is nil")
 	}
 	if err := pruneContainer(cfg.Container); err != nil {
+		logger.Log.Error("error while pruning containers", zap.Error(err))
 		return err
 	}
 	if err := pruneImage(cfg.Image); err != nil {
+		logger.Log.Error("error while pruning images", zap.Error(err))
 		return err
 	}
 	return nil
@@ -38,16 +42,15 @@ func pruneContainer(cfg *config.PruneContainerConfig) error {
 	if err != nil {
 		return err
 	}
-	var s strings.Builder
-	for _, r := range report.ContainersDeleted {
-		s.WriteString("deleted container: ")
-		s.WriteString(r)
-		s.WriteByte('\n')
+	if len(report.ContainersDeleted) > 0 {
+		for _, r := range report.ContainersDeleted {
+			var s strings.Builder
+			s.WriteString("deleted container: ")
+			s.WriteString(r)
+			logger.Log.Info(s.String())
+		}
+		logger.Log.Info("claimed " + humanize.Bytes(report.SpaceReclaimed))
 	}
-	s.WriteString(humanize.Bytes(report.SpaceReclaimed))
-
-	fmt.Println(s.String())
-
 	return nil
 }
 
@@ -66,22 +69,20 @@ func pruneImage(cfg *config.PruneImageConfig) error {
 	if err != nil {
 		return err
 	}
-	var s strings.Builder
-	for _, r := range report.ImagesDeleted {
-		if r.Untagged != "" {
-			s.WriteString("untagged image: ")
-			s.WriteString(r.Untagged)
-			s.WriteByte('\n')
+	if len(report.ImagesDeleted) > 0 {
+		for _, r := range report.ImagesDeleted {
+			var s strings.Builder
+			if r.Untagged != "" {
+				s.WriteString("untagged image: ")
+				s.WriteString(r.Untagged)
+			}
+			if r.Deleted != "" {
+				s.WriteString("deleted image: ")
+				s.WriteString(r.Deleted)
+			}
+			logger.Log.Info(s.String())
 		}
-		if r.Deleted != "" {
-			s.WriteString("deleted image: ")
-			s.WriteString(r.Deleted)
-			s.WriteByte('\n')
-		}
+		logger.Log.Info("claimed " + humanize.Bytes(report.SpaceReclaimed))
 	}
-	s.WriteString(humanize.Bytes(report.SpaceReclaimed))
-
-	fmt.Println(s.String())
-
 	return nil
 }
