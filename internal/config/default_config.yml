@@ -13,8 +13,8 @@ image:
   
   # exclude all images with the following labels
   # labels can be provided as key-value pairs separted with a "="
-  #excludeLabels:
-  #  - bermuda.exclude
+  excludeLabels:
+    - bermuda.exclude
 
   # include all images with the following labels
   # labels can be provided as key-value pairs separted with a "="
@@ -25,7 +25,7 @@ image:
 container:
   active: false
   until: 10m
-  #excludeLabels:
-  #  - bermuda.exclude
+  excludeLabels:
+    - bermuda.exclude
   includeLabels:
     - bermuda.include
