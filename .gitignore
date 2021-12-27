@@ -2,3 +2,4 @@
 dist/
 bermuda.yml
 Dockerfile
+bermuda.log

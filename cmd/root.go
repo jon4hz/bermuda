@@ -5,6 +5,7 @@ import (
 
 	"github.com/jon4hz/bermuda/internal/bermuda"
 	"github.com/jon4hz/bermuda/internal/config"
+	"github.com/jon4hz/bermuda/internal/logger"
 	"github.com/jon4hz/bermuda/internal/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -55,6 +56,7 @@ func init() {
 
 func initConfig() {
 	config.LoadConfig(rootFlags.cfgFile)
+	logger.New(config.Get().Logging)
 }
 
 func Execute() error {

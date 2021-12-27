@@ -29,3 +29,7 @@ container:
     - bermuda.exclude
   includeLabels:
     - bermuda.include
+
+logging:
+  logfile: ./bermuda.log
+  verbose: false

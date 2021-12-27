@@ -28,9 +28,15 @@ type PruneContainerConfig struct {
 	Active        bool     `yaml:"active"`
 }
 
+type LoggingConfig struct {
+	LogFile string `yaml:"logFile"`
+	Verbose bool   `yaml:"verbose"`
+}
+
 type Config struct {
 	Image     *PruneImageConfig     `yaml:"image"`
 	Container *PruneContainerConfig `yaml:"container"`
+	Logging   *LoggingConfig        `yaml:"logging"`
 }
 
 //go:embed default_config.yml
