@@ -48,7 +48,7 @@ func LoadConfig(file string) {
 	if file == "" {
 		file = DefaultCfgFile
 	}
-	viper.SetConfigFile(DefaultCfgFile)
+	viper.SetConfigFile(file)
 	viper.SetConfigType("yaml")
 
 	if err := viper.ReadInConfig(); err != nil {
