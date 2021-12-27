@@ -1,0 +1,30 @@
+run:
+  tests: false
+
+linters-settings:
+  govet:
+    enable:
+      - atomicalign
+      - fieldalignment
+
+linters:
+  enable:
+    - bodyclose
+    - dupl
+    - exportloopref
+    - goconst
+    - godot
+    - godox
+    - goimports
+    - goprintffuncname
+    - gosec
+    - ifshort
+    - misspell
+    - prealloc
+    - revive
+    - rowserrcheck
+    - sqlclosecheck
+    - unconvert
+    - unparam
+    - whitespace
+    - govet
